@@ -270,11 +270,13 @@ void UI::adminPanel()
         case 3:
             if (CarRental::getCarRental()->vehicles == nullptr) {
                 cout << "ERROR: Vehicles not found1" << endl;
-                system("pause");
+                
             }
             else {
                 CarRental::getCarRental()->printVehicles();
+                
             }
+            system("pause");
             break;
         case 4:
             cout << "Type in brand" << endl;

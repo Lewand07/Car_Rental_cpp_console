@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include "Templates.h"
 #include "Global.h"
 #include "User.h"
 #include "Vehicle.h"
@@ -23,7 +24,6 @@ class CarRental
 		~Renting();
 		void getRenting();
 		void setRenting(size_t vID, size_t pID);
-		//Renting& operator=(const Renting& renting);
 
 		friend void print(CarRental::Renting*& rentings, const size_t size);
 	};
@@ -36,16 +36,18 @@ class CarRental
 	size_t peopleCounter = 0;
 	size_t vehiclesCounter = 0;
 
+	void ini(); //testing data
 	static CarRental* carRental;
 public:
 	CarRental() { ini(); };
 	CarRental(CarRental&);
 	~CarRental();
-
+	
+	
+	//INTERFACE
 	void addPerson(Person* newPerson);
 	void deletePerson(size_t ind);
 	
-	void ini(); //testing data
 	void addVehicle(Vehicle* newVehicle);
 	void deleteVehicle(size_t ind);
 
@@ -57,21 +59,22 @@ public:
 	void printVehicles();
 	
 
-	friend void push(CarRental::Renting*& rentings, size_t& size);
-	friend void pop(CarRental::Renting*& rentings, size_t& size, const size_t ind);
+	//friend void push(CarRental::Renting*& rentings, size_t& size);
+	//friend void pop(CarRental::Renting*& rentings, size_t& size, const size_t ind);
 	friend void print(CarRental::Renting*& rentings, const size_t size);
 
 	static CarRental* getCarRental();
 	CarRental& operator=(const CarRental& carRental);
 };
 
-void push(CarRental::Renting*& rentings, size_t& size);
-void push(Person**& people, size_t& size);
-void push(Vehicle**& vehicles, size_t& size);
+//template
+//void push(CarRental::Renting*& rentings, size_t& size);
+//void push(Person**& people, size_t& size);
+//void push(Vehicle**& vehicles, size_t& size);
 
-void pop(CarRental::Renting*& rentings, size_t& size, const size_t ind);
-void pop(Person**& people, size_t& size, const size_t ind);
-void pop(Vehicle**& vehicles, size_t& size, const size_t ind);
+//void pop(CarRental::Renting*& rentings, size_t& size, const size_t ind);
+//void pop(Person**& people, size_t& size, const size_t ind);
+//void pop(Vehicle**& vehicles, size_t& size, const size_t ind);
 
 void print(CarRental::Renting*& rentings, const size_t size);
 void print(Person**& people, const size_t size, ObjType& objtype);

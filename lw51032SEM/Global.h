@@ -31,6 +31,3 @@ struct Date {
 std::ostream& operator<<(std::ostream& output, Date*& date);
 std::ostream& operator<<(std::ostream& output, Date& date);
 
-
-
-

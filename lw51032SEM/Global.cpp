@@ -93,4 +93,3 @@ std::ostream& operator<<(std::ostream& output, Date& date) {
     output << date.day << "." << date.month << "." << date.year << "  " << date.hour << ":" << date.minute << std::endl;
     return output;
 }
-

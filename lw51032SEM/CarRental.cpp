@@ -103,8 +103,7 @@ CarRental::~CarRental() {
 }
 
 void CarRental::addPerson(Person* newPerson){
-	push(people, peopleCounter);
-	people[peopleCounter - 1] = newPerson;
+	push(people, peopleCounter,newPerson);
 
 }
 
@@ -132,9 +131,7 @@ void CarRental::ini()
 }
 
 void CarRental::addVehicle(Vehicle* newVehicle) {
-	push(vehicles, vehiclesCounter);
-	vehicles[vehiclesCounter-1] = newVehicle;
-
+	push(vehicles, vehiclesCounter, newVehicle);
 }
 
 void CarRental::deleteVehicle(size_t ind) {
@@ -345,124 +342,124 @@ CarRental& CarRental::operator=(const CarRental& carRental) {
 	return *this;
 }
 
-void push(CarRental::Renting*& rentings, size_t& size) {
-	if (size == 0) {
-		rentings = new CarRental::Renting;
-	}
-	else if (size == 1) {
-		auto temp = new CarRental::Renting[1];
-		temp[0] = *rentings;
-		delete rentings;
-		rentings = new CarRental::Renting[size + 1];
-		rentings[0] = *temp;
-		delete[] temp;
-	}
-	else {
-		auto temp = new CarRental::Renting[size + 1];
-		for (size_t i = 0; i < size; i++) {
-			temp[i] = rentings[i];
-		}
-		delete[] rentings;
-		rentings = temp;
-	}
-}
+//void push(CarRental::Renting*& rentings, size_t& size) {
+//	if (size == 0) {
+//		rentings = new CarRental::Renting;
+//	}
+//	else if (size == 1) {
+//		auto temp = new CarRental::Renting[1];
+//		temp[0] = *rentings;
+//		delete rentings;
+//		rentings = new CarRental::Renting[size + 1];
+//		rentings[0] = *temp;
+//		delete[] temp;
+//	}
+//	else {
+//		auto temp = new CarRental::Renting[size + 1];
+//		for (size_t i = 0; i < size; i++) {
+//			temp[i] = rentings[i];
+//		}
+//		delete[] rentings;
+//		rentings = temp;
+//	}
+//}
 
-void push(Person**& people, size_t& size) {
-	if (size == 0) {
-		people = new Person * [size + 1];
-		size++;
-	}
-	else {
-		Person** temp = new Person * [size + 1];
-		for (size_t i = 0; i < size; i++)
-			temp[i] = people[i];
-		delete[] people;
-		people = temp;
-		size++;
-	}
-}
+//void push(Person**& people, size_t& size) {
+//	if (size == 0) {
+//		people = new Person * [size + 1];
+//		size++;
+//	}
+//	else {
+//		Person** temp = new Person * [size + 1];
+//		for (size_t i = 0; i < size; i++)
+//			temp[i] = people[i];
+//		delete[] people;
+//		people = temp;
+//		size++;
+//	}
+//}
+//
+//void push(Vehicle**& vehicles, size_t& size)
+//{
+//	if (size == 0) {
+//		vehicles = new Vehicle * [size + 1];
+//		size++;
+//	}
+//	else {
+//		Vehicle** temp = new Vehicle * [size + 1];
+//		for (size_t i = 0; i < size; i++)
+//			temp[i] = vehicles[i];
+//		delete[] vehicles;
+//		vehicles = temp;
+//		size++;
+//	}
+//}
 
-void push(Vehicle**& vehicles, size_t& size)
-{
-	if (size == 0) {
-		vehicles = new Vehicle * [size + 1];
-		size++;
-	}
-	else {
-		Vehicle** temp = new Vehicle * [size + 1];
-		for (size_t i = 0; i < size; i++)
-			temp[i] = vehicles[i];
-		delete[] vehicles;
-		vehicles = temp;
-		size++;
-	}
-}
+//void pop(CarRental::Renting*& rentings, size_t& size, const size_t ind)
+//{
+//	if (size < ind) {
+//		std::cout << "ERROR: Wrong index!" << std::endl;
+//	}
+//	else {
+//		if (size == 1) {
+//			delete rentings;
+//		}
+//		else if (size > 1) {
+//			auto temp = new CarRental::Renting[size - 1];
+//			size_t j{ 0 };
+//			for (size_t i = 0; i < size; i++) {
+//				if (i != ind) {
+//					temp[j] = rentings[i];
+//					j++;
+//				}
+//			}
+//			delete[] rentings;
+//			rentings = temp;
+//
+//		}
+//		size--;
+//	}
+//}
 
-void pop(CarRental::Renting*& rentings, size_t& size, const size_t ind)
-{
-	if (size < ind) {
-		std::cout << "ERROR: Wrong index!" << std::endl;
-	}
-	else {
-		if (size == 1) {
-			delete rentings;
-		}
-		else if (size > 1) {
-			auto temp = new CarRental::Renting[size - 1];
-			size_t j{ 0 };
-			for (size_t i = 0; i < size; i++) {
-				if (i != ind) {
-					temp[j] = rentings[i];
-					j++;
-				}
-			}
-			delete[] rentings;
-			rentings = temp;
-
-		}
-		size--;
-	}
-}
-
-void pop(Person**& people, size_t& size, const size_t ind)
-{
-	if (size < ind) {
-		std::cout << "ERROR: Wrong index!" << std::endl;
-	}
-	else {
-		Person** temp = new Person * [size - 1];
-		size_t j{ 0 };
-		for (size_t i = 0; i < size; i++) {
-			if (i != ind) {
-				temp[j] = people[i];
-				j++;
-			}
-		}
-		delete[] people;
-		people = temp;
-		size--;
-	}
-}
-
-void pop(Vehicle**& vehicles, size_t& size, const size_t ind)
-{
-	if (size < ind) {
-		std::cout << "ERROR: Wrong index!" << std::endl;
-	}
-	else {
-		auto temp = new Vehicle * [size - 1];
-		size_t j{ 0 };
-		for (size_t i = 0; i < size; i++) {
-			if (i != ind) {
-				temp[j] = vehicles[i];
-				j++;
-			}
-		}
-		delete[] vehicles;
-		vehicles = temp;
-		size--;
-	}
-}
+//void pop(Person**& people, size_t& size, const size_t ind)
+//{
+//	if (size < ind) {
+//		std::cout << "ERROR: Wrong index!" << std::endl;
+//	}
+//	else {
+//		Person** temp = new Person * [size - 1];
+//		size_t j{ 0 };
+//		for (size_t i = 0; i < size; i++) {
+//			if (i != ind) {
+//				temp[j] = people[i];
+//				j++;
+//			}
+//		}
+//		delete[] people;
+//		people = temp;
+//		size--;
+//	}
+//}
+//
+//void pop(Vehicle**& vehicles, size_t& size, const size_t ind)
+//{
+//	if (size < ind) {
+//		std::cout << "ERROR: Wrong index!" << std::endl;
+//	}
+//	else {
+//		auto temp = new Vehicle * [size - 1];
+//		size_t j{ 0 };
+//		for (size_t i = 0; i < size; i++) {
+//			if (i != ind) {
+//				temp[j] = vehicles[i];
+//				j++;
+//			}
+//		}
+//		delete[] vehicles;
+//		vehicles = temp;
+//		size--;
+//	}
+//}
 
 void print(CarRental::Renting*& rentings, const size_t size)
 {

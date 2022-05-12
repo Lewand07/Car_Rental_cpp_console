@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include "Templates.h"
+#include "MyVector.h"
 #include "Global.h"
 #include "User.h"
 #include "Vehicle.h"
@@ -28,7 +29,7 @@ class CarRental
 		friend void print(CarRental::Renting*& rentings, const size_t size);
 	};
 	
-	Renting* rentings{ nullptr };
+	MyVector<Renting> rentings;
 	Person** people{ nullptr };
 	Vehicle** vehicles{ nullptr };
 
@@ -62,6 +63,7 @@ public:
 	//friend void push(CarRental::Renting*& rentings, size_t& size);
 	//friend void pop(CarRental::Renting*& rentings, size_t& size, const size_t ind);
 	friend void print(CarRental::Renting*& rentings, const size_t size);
+	friend class MyVector<Renting>;
 
 	static CarRental* getCarRental();
 	CarRental& operator=(const CarRental& carRental);

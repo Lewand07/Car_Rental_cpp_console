@@ -49,26 +49,12 @@ void CarRental::Renting::setRenting(size_t vID, size_t pID) {
 	
 }
 
-////CarRental::Renting& CarRental::Renting::operator=(const Renting& renting){
-//	if (&renting != this) {
-//		
-//		begin = renting.begin;
-//
-//		end = renting.end;
-//
-//		vehicleID = renting.vehicleID;
-//		personID = renting.personID;
-//	}
-//
-//	return *this;
-//}
-
 CarRental::CarRental(CarRental& oldCR){ 
-	if (rentingsCounter == 1) {
+	if (rentings.getSize() == 1) {
 		rentings = oldCR.rentings;
 	}
 	else {
-		for (size_t i = 0; i < rentingsCounter; i++) {
+		for (size_t i = 0; i < rentings.getSize(); i++) {
 			rentings[i] = oldCR.rentings[i];
 		}
 	}
@@ -84,12 +70,8 @@ CarRental::CarRental(CarRental& oldCR){
 }
 
 CarRental::~CarRental() {
-	if (rentingsCounter > 0) {
-		delete[] rentings;
-	}
-	else {
-		delete rentings;
-	}
+	
+	
 	for (size_t i = 0; i < peopleCounter; i++) {
 		delete people[i];
 	}
@@ -164,8 +146,8 @@ void CarRental::rentVehicle(size_t ind){
 		}
 	} while (!free);
 	vID = vehicles[vIND]->getID();
-	push(rentings, rentingsCounter);
-	rentings[rentingsCounter-1].setRenting(vID, ind);
+	rentings.push(*(new Renting));
+	rentings[rentings.getSize()-1].setRenting(vID, ind);
 	vehicles[vIND]->renting();
 	people[ind]->setRenting(true);
 }
@@ -173,7 +155,7 @@ void CarRental::rentVehicle(size_t ind){
 void CarRental::returnVehicle(size_t ind){
 	size_t op{0}, rID{0};
 
-	for (size_t i = 0; i < rentingsCounter; i++) {
+	for (size_t i = 0; i < rentings.getSize(); i++) {
 		if (ind == rentings[i].personID) {
 			rID = i;
 			break;
@@ -199,7 +181,7 @@ void CarRental::returnVehicle(size_t ind){
 				break;
 			}
 		}
-		pop(rentings, rentingsCounter, rID);
+		rentings.pop(rID);
 		break;
 	case 2:
 		break;
@@ -213,14 +195,14 @@ void CarRental::returnVehicle(size_t ind){
 void CarRental::printRentings()
 {
 	std::cout << "*************** RENTINGS ***************" << std::endl;
-	if (rentingsCounter == 1) {
+	if (rentings.getSize() == 1) {
 		std::cout << std::endl << "IND: " << 0 << std::endl;
-		std::cout << "Person id: " << rentings->personID << std::endl;
-		std::cout << "Vehicle id: " << rentings->vehicleID << std::endl;
-		rentings->getRenting();
+		std::cout << "Person id: " << rentings[0].personID << std::endl;
+		std::cout << "Vehicle id: " << rentings[0].vehicleID << std::endl;
+		rentings[0].getRenting();
 	}
 	else {
-		for (size_t i = 0; i < rentingsCounter; i++) {
+		for (size_t i = 0; i < rentings.getSize(); i++) {
 			std::cout << std::endl << "IND: " << i << std::endl;
 			std::cout << "Person id: " << rentings[i].personID << std::endl;
 			std::cout << "Vehicle id: " << rentings[i].vehicleID << std::endl;
@@ -303,21 +285,15 @@ CarRental* CarRental::getCarRental(){
 
 CarRental& CarRental::operator=(const CarRental& carRental) {
 	if (&carRental != this) {
-		rentingsCounter = carRental.rentingsCounter;
 		peopleCounter = carRental.peopleCounter;
 		vehiclesCounter = carRental.vehiclesCounter;
 		
-		if (rentingsCounter > 0) {
-			delete[] rentings;
-		}
-		else {
-			delete rentings;
-		}
-		if (rentingsCounter == 1) {
+
+		if (rentings.getSize() == 1) {
 			rentings = carRental.rentings;
 		}
 		else {
-			for (size_t i = 0; i < rentingsCounter; i++) {
+			for (size_t i = 0; i < rentings.getSize(); i++) {
 				rentings[i] = carRental.rentings[i];
 			}
 		}

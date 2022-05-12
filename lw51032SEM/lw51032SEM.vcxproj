@@ -154,6 +154,7 @@
     <ClInclude Include="CarRental.h" />
     <ClInclude Include="Global.h" />
     <ClInclude Include="Motorcycle.h" />
+    <ClInclude Include="MyVector.h" />
     <ClInclude Include="Person.h" />
     <ClInclude Include="Templates.h" />
     <ClInclude Include="UI.h" />

@@ -240,7 +240,7 @@ void UI::adminPanel()
     do {
         system("cls");
         cout << "*****************ADMIN******************" << endl;
-        cout << "\n\t\t1. Users list\n\t\t2. Delete User\n\t\t3. Vehicles list\n\t\t4. Add Car\n\t\t5. Add Motorcycle\n\t\t5. Delete Vehicle\n\t\t6. Rentings List\n\t\t7. Back\n\t\t8. Exit\n" << endl;
+        cout << "\n\t\t1. Users list\n\t\t2. Delete User\n\t\t3. Vehicles list\n\t\t4. Add Car\n\t\t5. Add Motorcycle\n\t\t6. Delete Vehicle\n\t\t7. Rentings List\n\t\t8. Back\n\t\t9. Exit\n" << endl;
         cout << "****************************************" << endl;
         size_t option = NULL, ind = NULL, op = NULL;
         string brand, model;
@@ -299,7 +299,7 @@ void UI::adminPanel()
             CarRental::getCarRental()->deleteVehicle(ind);
             break;
         case 7:
-            if (CarRental::getCarRental()->rentings == nullptr) {
+            if (CarRental::getCarRental()->rentings.getSize() <1) {
                 cout << "ERROR: Vehicles not found1" << endl;
                 system("pause");
             }

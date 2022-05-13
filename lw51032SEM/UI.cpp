@@ -11,7 +11,10 @@ UI::UI(UI& old_ui) {
 }
 
 UI::~UI(){
-    delete ui;
+    if (!ui) {
+        delete ui;
+    }
+    
 }
 
 UI* UI::getUI() {
@@ -76,7 +79,7 @@ void UI::signup() {
         while (check) {
             cout << "Username :";
             cin >> temp;
-            if (CarRental::getCarRental()->people == nullptr && temp != "admin") {
+            if (CarRental::getCarRental()->people[0] == nullptr && temp != "admin") {
                 user->setLogin(temp);
                 check = false;
             }
@@ -84,9 +87,9 @@ void UI::signup() {
                 cout << "ERROR: Username taken, try again!" << endl;
                 continue;
             }
-            else if (CarRental::getCarRental()->people != nullptr) {
+            else if (CarRental::getCarRental()->people[0] != nullptr) {
                 bool taken = true;
-                for (size_t i = 0; i < CarRental::getCarRental()->peopleCounter; i++) {
+                for (size_t i = 0; i < CarRental::getCarRental()->people.getSize(); i++) {
                     if (CarRental::getCarRental()->people[i]->Person::getLogin() == temp) {
                         taken = false;
                         cout << "ERROR: Username taken, try again!" << endl;
@@ -144,8 +147,8 @@ void UI::login() {
             }
 
         }
-        if (CarRental::getCarRental()->peopleCounter > 0) {
-            for (size_t i = 0; i < CarRental::getCarRental()->peopleCounter; i++) {
+        if (CarRental::getCarRental()->people.getSize() > 0) {
+            for (size_t i = 0; i < CarRental::getCarRental()->people.getSize(); i++) {
                 if (username == CarRental::getCarRental()->people[i]->getLogin()) {
                     ind = i;
                     usrExist = true;
@@ -153,7 +156,7 @@ void UI::login() {
                 }
             }
         }
-        else if (CarRental::getCarRental()->people != nullptr) {
+        else if (CarRental::getCarRental()->people[0] != nullptr) {
             usrExist = (username == CarRental::getCarRental()->people[0]->getLogin());
         }
 
@@ -195,7 +198,7 @@ void UI::menu(size_t& ind){
     do {
         system("cls");
         cout << "***************CAR RENTAL***************" << endl;
-        cout << "\n\t\t1. Profile Data\n\t\t2. Delete Acc\n\t\t3. Rental\n\t\t4. Back\n\t\t5. Exit\n" << endl;
+        cout << "\n\t\t1. Profile Data\n\t\t2. Delete Acc\n\t\t3. Rental\n\t\t4. Rentings history\n\t\t5. Back\n\t\t6. Exit\n" << endl;
         cout << "****************************************" << endl;
         size_t option = NULL;
         cin >> option;
@@ -218,9 +221,13 @@ void UI::menu(size_t& ind){
             }
             break;
         case 4:
-            return;
+            CarRental::getCarRental()->printRentingsHistory(ind);
+            system("pause");
             break;
         case 5:
+            return;
+            break;
+        case 6:
             run = false;
             break;
 
@@ -247,7 +254,7 @@ void UI::adminPanel()
         cin >> option;
         switch (option) {
         case 1:
-            if (CarRental::getCarRental()->people == nullptr) {
+            if (CarRental::getCarRental()->people[0] == nullptr) {
                 cout << "ERROR: Users not found!" << endl;
             }
             else {
@@ -256,7 +263,7 @@ void UI::adminPanel()
             system("pause");
             break;
         case 2:
-            if (CarRental::getCarRental()->people == nullptr) {
+            if (CarRental::getCarRental()->people[0] == nullptr) {
                 cout << "ERROR: Users not found!" << endl;
                 system("pause");
             }

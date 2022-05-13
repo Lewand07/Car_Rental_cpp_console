@@ -23,6 +23,8 @@ public:
 	virtual ~Person() {};
 
 	virtual void print() = 0;
+	virtual void rent(size_t) = 0;
+	virtual std::vector<size_t> getHistory() const = 0;
 
 	inline ObjType get_type() { return objType; }
 	void set_type(ObjType t) { objType = t; }

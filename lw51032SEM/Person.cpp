@@ -2,12 +2,11 @@
 size_t Person::checkNumber = 1;
 
 Person::Person() : pesel{ randomPESEL() }, id { checkNumber++ } {
-	type_property = ObjType::Person;
+	
 }
 
 Person::Person(string nFirstName, string nLastName, string nLogin, string nPassword) : firstName{ nFirstName }, lastName{ nLastName }, 
 login{ nLogin }, password{ nPassword }, pesel{ randomPESEL() }, id{ checkNumber++ } {
-	type_property = ObjType::Person;
 }
 
 Person::Person(const Person& person) : pesel{ person.pesel }, id{ person.id } {

@@ -4,7 +4,7 @@
 template<typename T>
 class MyVector {
 	T* tVector{nullptr};
-	size_t size;
+	size_t size{0};
 public:
     MyVector(size_t size=0);
 	MyVector(const T& rVector) = delete;
@@ -22,9 +22,11 @@ MyVector<T>::MyVector(size_t size) : size{ size }, tVector{ nullptr } { }
 
 template<typename T>
 MyVector<T>::~MyVector() {
-    delete[] tVector;
-    tVector = nullptr;
-    size = 0;
+    if (!this) {
+        delete[] tVector;
+        tVector = nullptr;
+        size = 0;
+    }
 }
 
 
@@ -37,7 +39,7 @@ void MyVector<T>::push(T t)
         size++;
     }
     else {
-        T* temp = new T[size + 1];
+        auto temp = new T[size + 1];
         for (size_t i = 0; i < size; ++i)
             temp[i] = tVector[i];
         temp[size] = t;
@@ -51,7 +53,7 @@ template<typename T>
 void MyVector<T>::pop() {
     if (size > 1) {
         auto temp = new T[size - 1];
-        for (size_t i = 0; i < size - 1; ++i)
+        for (size_t i = 0; i < size - 1; i++)
             temp[i] = tVector[i];
         delete[] tVector;
         tVector = temp;
@@ -70,11 +72,11 @@ template<typename T>
 void MyVector<T>::pop(size_t ind) {
     if (ind < size) {
         auto temp = new T[size - 1];
-        size_t j{};
-        for (size_t i = 0; i < size; ++i)
+        size_t j{0};
+        for (size_t i = 0; i < size; i++)
             if (i != ind) {
                 temp[j] = tVector[i];
-                ++j;
+                j++;
             }
         delete[] tVector;
         tVector = temp;

@@ -3,13 +3,30 @@
 
 CarRental* CarRental::carRental = CarRental::getCarRental();
 
+size_t CarRental::Renting::nr = 1;
+
 CarRental::Renting::~Renting(){
 	;
+}
+
+size_t CarRental::Renting::getPersonID() const
+{
+	return personID;
+}
+
+size_t CarRental::Renting::getVehicleID() const
+{
+	return vehicleID;
 }
 
 void CarRental::Renting::getRenting() {
 	std::cout << "\nBegin Date: " << begin << std::endl;
 	std::cout << "End Date: " << end << std::endl;
+}
+
+size_t CarRental::Renting::getRentingID() const
+{
+	return rentingID;
 }
 
 void CarRental::Renting::setRenting(size_t vID, size_t pID) {
@@ -59,7 +76,7 @@ CarRental::CarRental(CarRental& oldCR){
 		}
 	}
 
-	for (size_t i = 0; i < peopleCounter; i++) {
+	for (size_t i = 0; i < people.getSize(); i++) {
 		addPerson(oldCR.people[i]);
 	}
 
@@ -71,26 +88,37 @@ CarRental::CarRental(CarRental& oldCR){
 
 CarRental::~CarRental() {
 	
-	
-	for (size_t i = 0; i < peopleCounter; i++) {
-		delete people[i];
-	}
-	delete[] people;
-	for (size_t i = 0; i < vehiclesCounter; i++) {
-		delete vehicles[i];
-	}
-	delete[] vehicles;
+	if (!carRental) {
+		for (size_t i = 0; i < people.getSize(); i++) {
+			delete people[i];
+			people[i] = nullptr;
+			people.pop(i);
+		}
+		for (size_t i = 0; i < vehiclesCounter; i++) {
+			delete vehicles[i];
+		}
 
-	delete carRental;
+		for (size_t i = 0; i < rentings.getSize(); i++) {
+			rentings.pop();
+		}
+
+		delete[] vehicles;
+
+		delete carRental;
+	}
+
 }
 
 void CarRental::addPerson(Person* newPerson){
-	push(people, peopleCounter,newPerson);
-
+	//push(people, people.getSize(),newPerson);
+	people.push(newPerson);
 }
 
 void CarRental::deletePerson(size_t ind) {
-	pop(people, peopleCounter, ind);
+	//pop(people, people.getSize(), ind);
+	delete people[ind];
+	people[ind] = nullptr;
+	people.pop(ind);
 }
 
 void CarRental::ini()
@@ -122,7 +150,7 @@ void CarRental::deleteVehicle(size_t ind) {
 
 void CarRental::rentVehicle(size_t ind){
 	bool free = false;
-	size_t vIND{ 0 }, vID, op;
+	size_t vIND{ 0 }, vID{}, op{};
 	do {
 		if (CarRental::getCarRental()->vehicles == nullptr) {
 			std::cout << "ERROR: Vehicles not found1" << std::endl;
@@ -150,6 +178,7 @@ void CarRental::rentVehicle(size_t ind){
 	rentings[rentings.getSize()-1].setRenting(vID, ind);
 	vehicles[vIND]->renting();
 	people[ind]->setRenting(true);
+	people[ind]->rent(rentings[rentings.getSize() - 1].getRentingID());
 }
 
 void CarRental::returnVehicle(size_t ind){
@@ -238,7 +267,7 @@ void CarRental::printPeople(){
 		}
 	} while (go);
 
-	print(vehicles, vehiclesCounter, objtype);
+	print(people, people.getSize(), objtype);
 }
 
 void CarRental::printVehicles() {
@@ -276,6 +305,11 @@ void CarRental::printVehicles() {
 
 }
 
+void CarRental::printRentingsHistory(size_t ind)
+{
+	print(people[ind]->getHistory(), rentings);
+}
+
 CarRental* CarRental::getCarRental(){
 	if (!carRental) {
 		carRental = new CarRental;
@@ -285,7 +319,6 @@ CarRental* CarRental::getCarRental(){
 
 CarRental& CarRental::operator=(const CarRental& carRental) {
 	if (&carRental != this) {
-		peopleCounter = carRental.peopleCounter;
 		vehiclesCounter = carRental.vehiclesCounter;
 		
 
@@ -299,11 +332,11 @@ CarRental& CarRental::operator=(const CarRental& carRental) {
 		}
 		
 
-		for (size_t i = 0; i < peopleCounter; i++) {
+		for (size_t i = 0; i < people.getSize(); i++) {
 			delete people[i];
 		}
-		delete[] people;
-		for (size_t i = 0; i < peopleCounter; i++) {
+
+		for (size_t i = 0; i < people.getSize(); i++) {
 			addPerson(carRental.people[i]);
 		}
 
@@ -437,42 +470,43 @@ CarRental& CarRental::operator=(const CarRental& carRental) {
 //	}
 //}
 
-void print(CarRental::Renting*& rentings, const size_t size)
+void print(MyVector<CarRental::Renting> rentings, const size_t size)
 {
 	std::cout << "*************** RENTINGS ***************" << std::endl;
 	if (size == 1) {
 		std::cout << std::endl << "IND: " << 0 << std::endl;
-		std::cout << "Person id: " << rentings->personID << std::endl;
-		std::cout << "Vehicle id: " << rentings->vehicleID << std::endl;
-		rentings->getRenting();
+		std::cout << "Person id: " << rentings[0].getPersonID() << std::endl;
+		std::cout << "Vehicle id: " << rentings[0].getVehicleID() << std::endl;
+		rentings[0].getRenting();
 	}
 	else {
 		for (size_t i = 0; i < size; i++) {
 			std::cout << std::endl << "IND: " << i << std::endl;
-			std::cout << "Person id: " << rentings[i].personID << std::endl;
-			std::cout << "Vehicle id: " << rentings[i].vehicleID << std::endl;
+			std::cout << "Person id: " << rentings[i].getPersonID() << std::endl;
+			std::cout << "Vehicle id: " << rentings[i].getVehicleID() << std::endl;
 			rentings[i].getRenting();
 		}
 	}
 	std::cout << "*****************************************" << std::endl;
 }
 
-void print(Person**& people, const size_t size, ObjType& objtype)
+void print(MyVector<Person*> people, const size_t size, ObjType& objtype)
 {
 	if (objtype == ObjType::Person) {
-		std::cout << "*************** CUSTOMERS ***************" << std::endl;
+		std::cout << "**************** PEOPLE ****************" << std::endl;
 		for (size_t i = 0; i < size; i++) {
 			std::cout << std::endl << "IND: " << i;
 			people[i]->print();
 		}
-		std::cout << "*****************************************" << std::endl;
+		std::cout << "****************************************" << std::endl;
 	}
-	else {
+	else if(objtype == ObjType::User) {
 		std::cout << "*************** CUSTOMERS ***************" << std::endl;
 		for (size_t i = 0; i < size; i++) {
 			if (people[i]->type_property == objtype) {
 				std::cout << std::endl << "IND: " << i;
 				people[i]->print();
+				
 			}
 		}
 		std::cout << "*****************************************" << std::endl;
@@ -496,5 +530,19 @@ void print(Vehicle**& vehicles, const size_t size, ObjType& objtype)
 				vehicles[i]->print();
 			}
 		}
+	}
+}
+
+void print(std::vector<size_t> history, MyVector<CarRental::Renting> rentings)
+{	
+	size_t i = 0;
+	for (std::vector<size_t>::iterator it = history.begin(); it != history.end(); it++) {
+		
+		if (*it == rentings[i].getRentingID()) {
+			std::cout << "Renting ID: " << rentings[i].getRentingID() << std::endl;
+			rentings[i].getRenting();
+			std::cout << "**************************************** " << rentings[i].getRentingID() << std::endl;
+		}
+		i++;
 	}
 }

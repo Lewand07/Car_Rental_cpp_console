@@ -1,5 +1,16 @@
 #include "User.h"
 
+
+std::vector<size_t> User::getHistory() const
+{
+    return history;
+}
+
+void User::rent(size_t rID)
+{
+    history.push_back(rID);
+}
+
 void User::print(){
     std::cout << "\nUser: " << id << std::endl;
     std::cout << "\tFirst name: " << firstName << std::endl;

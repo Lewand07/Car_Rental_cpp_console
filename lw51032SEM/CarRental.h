@@ -9,28 +9,33 @@
 #include "Motorcycle.h"
 #include <time.h>
 
+
 class CarRental
 {
 	friend class UI;
 
-	class Renting{
+	class Renting {
 		friend class CarRental;
-		
+		static size_t nr;
 		Date begin{};
 		Date end{};
+		size_t rentingID{};
 		size_t vehicleID{};
 		size_t personID{};
 
 	public:
+		Renting() : rentingID{ nr++ } {};
 		~Renting();
+		size_t getPersonID() const;
+		size_t getVehicleID() const;
 		void getRenting();
+		size_t getRentingID() const;
 		void setRenting(size_t vID, size_t pID);
 
 		friend void print(CarRental::Renting*& rentings, const size_t size);
 	};
-	
 	MyVector<Renting> rentings;
-	Person** people{ nullptr };
+	MyVector<Person*> people;
 	Vehicle** vehicles{ nullptr };
 
 	size_t rentingsCounter = 0;
@@ -56,14 +61,16 @@ public:
 	void returnVehicle(size_t ind);
 	
 	void printRentings();
+	void printRentingsHistory(size_t ind);
 	void printPeople();
 	void printVehicles();
 	
 
 	//friend void push(CarRental::Renting*& rentings, size_t& size);
 	//friend void pop(CarRental::Renting*& rentings, size_t& size, const size_t ind);
-	friend void print(CarRental::Renting*& rentings, const size_t size);
+	friend void print(MyVector<CarRental::Renting> rentings, const size_t size);
 	friend class MyVector<Renting>;
+	friend void print(std::vector<size_t> history, MyVector<CarRental::Renting> rentings);
 
 	static CarRental* getCarRental();
 	CarRental& operator=(const CarRental& carRental);
@@ -77,7 +84,7 @@ public:
 //void pop(CarRental::Renting*& rentings, size_t& size, const size_t ind);
 //void pop(Person**& people, size_t& size, const size_t ind);
 //void pop(Vehicle**& vehicles, size_t& size, const size_t ind);
-
-void print(CarRental::Renting*& rentings, const size_t size);
-void print(Person**& people, const size_t size, ObjType& objtype);
+void print(std::vector<size_t> history, MyVector<CarRental::Renting> rentings);
+void print(MyVector<CarRental::Renting> rentings, const size_t size);
+void print(MyVector<Person*>people, const size_t size, ObjType& objtype);
 void print(Vehicle**& vehicles, const size_t size, ObjType& objtype);
